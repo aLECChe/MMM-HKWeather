@@ -17,7 +17,7 @@
 ## Installation
 ```javascript
 cd ~/MagicMirror/modules/
-git clone https://github.com/aLECChu/MMM-HKWeather
+git clone https://github.com/aLECChe/MMM-HKWeather
 ```
 
 ## Config.js entry and options
