@@ -21,7 +21,8 @@ git clone https://github.com/aLECChe/MMM-HKWeather
 ```
 
 ## Config.js entry and options
-The lang here is only used by the HKO Open Data API. To change the module language, please change the system language.
+- The lang option here is only used by the HKO Open Data API. 
+- To change the language of the module, please change the system language.
 
  ```	 {
 			module: "MMM-HKWeather",
