@@ -24,7 +24,8 @@ git clone https://github.com/aLECChe/MMM-HKWeather
 - The lang option here is only used by the HKO Open Data API. 
 - To change the language of the module, please change the system language.
 
- ```	 {
+```
+  		{
 			module: "MMM-HKWeather",
 			position: "top_left",
 			config: {
