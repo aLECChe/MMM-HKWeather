@@ -1,0 +1,349 @@
+/* Magic Mirror
+ * Module: MMM-HKWeather
+ * By aLEC 2020
+ */
+
+
+@import url('https://fonts.googleapis.com/css?family=Muli');
+ .MMM-HKWeather {
+     width: 195px;
+}
+ .MMM-HKWeather .table th, tr, td {
+     text-align: center;
+     table-layout: fixed;
+}
+ .MMM-HKWeather tr {
+     height: 29px;
+}
+ .MMM-HKWeather .img {
+     width: 23px;
+     height: 23px;
+     align-content: center;
+     padding-bottom: 20%;
+}
+ .MMM-HKWeather .img img {
+     margin-top: -1.4em;
+}
+ .MMM-HKWeather .moon {
+     width: 23px;
+     height: 23px;
+     align-content: center;
+}
+ .MMM-HKWeather .icon {
+     width: 30px;
+     height: 30px;
+}
+ .MMM-HKWeather .windy {
+     width: 25px;
+     height: 25px;
+     align-content: center;
+}
+ .MMM-HKWeather .forerow {
+     padding-bottom: 10px;
+}
+ .MMM-HKWeather .Forecasttable {
+     float: left;
+     clear: left;
+     display: inline;
+     margin-left: auto;
+     margin-right: auto;
+     text-align: center;
+}
+ .MMM-HKWeather .rheading {
+     background-color: black;
+     text-align: center;
+     color: white;
+     text-shadow: 2px 8px 6px rgba(0, 0, 0, 0.2), 0px -5px 35px rgba(255, 255, 255, 0.3);
+     padding: 2px;
+     font-size: 14px;
+     line-height: 110%;
+     -webkit-animation: background 120s ease-out infinite;
+     animation: background 120s ease-out infinite;
+     border: 1px solid #a7bef3;
+     padding: 3px;
+}
+ @-webkit-keyframes background {
+     0% {
+         background-color: #cc4400;
+    }
+     25% {
+         background-color: #cc8800;
+    }
+     50% {
+         background-color: #009900;
+    }
+     75% {
+         background-color: #80bfff;
+    }
+     100% {
+         background-color: #cc4400;
+    }
+}
+ @keyframes background {
+     0% {
+         background-color: #cc4400;
+    }
+     25% {
+         background-color: #cc8800;
+    }
+     50% {
+         background-color: #009900;
+    }
+     75% {
+         background-color: #80bfff;
+    }
+     100% {
+         background-color: #cc4400;
+    }
+}
+ .MMM-HKWeather .font {
+     font-size: 23px;
+}
+ .MMM-HKWeather .fontac {
+     color: #e4ab5f 
+}
+ .MMM-HKWeather .fontss {
+     color: #e0e29a;
+}
+ .MMM-HKWeather .fontauw {
+     color: #51c7ca 
+}
+ .MMM-HKWeather .fontfor {
+     color: #000;
+}
+ .MMM-HKWeather .IMG {
+     width: 25px;
+     height: 24px;
+}
+ .MMM-HKWeather .image {
+     width: 250%;
+     height: 250%;
+}
+ .MMM-HKWeather .xxsmall {
+     font-size: 10px;
+     color: orange;
+     margin: 10px;
+     font-family: 'Muli', sans-serif;
+}
+ .MMM-HKWeather .tempf {
+     padding: 0 1px 1px 1px;
+     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+     position: relative;
+     z-index: 1;
+}
+ .MMM-HKWeather .floatl {
+     float: left;
+     overflow: hidden;
+     display: -webkit-box;
+     -webkit-box-orient: vertical;
+     -webkit-line-clamp: 2;
+     
+	 text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+	 position: relative;
+}
+ .MMM-HKWeather .forec {
+     position: relative;
+     z-index: 1;
+}
+ .MMM-HKWeather .collapsible {
+     background-color: #777;
+     color: white;
+     cursor: pointer;
+     padding: 18px;
+     width: 100%;
+     border: none;
+     text-align: left;
+     outline: none;
+     font-size: 15px;
+}
+ .MMM-HKWeather .active, .collapsible:hover {
+     background-color: #555;
+}
+ .MMM-HKWeather .content {
+     padding: 0 18px;
+     display: none;
+     overflow: hidden;
+     background-color: #f1f1f1;
+}
+ .MMM-HKWeather .index {
+     position: relative;
+     z-index: 1;
+}
+ .MMM-HKWeather .dates {
+     font-size: 12px;
+}
+ .MMM-HKWeather .tooltip {
+     position: relative;
+     display: inline-block;
+     float: left;
+}
+ .topshow {
+     z-index: 1;
+}
+ .MMM-HKWeather .tooltip .tooltiptext {
+     visibility: hidden;
+     width: 200px;
+     font-size: 17px;
+     background-color: black;
+     color: #fff;
+     text-align: center;
+     border-radius: 4px;
+     border-style: solid;
+     border-width: 1px;
+     border-color: white;
+     transform: translate(-50%, -50%);
+     box-shadow: 0px 0px 0px 2px #888888;
+     ​padding-top: 3px;
+     padding-right: 5px;
+     padding-bottom: 3px;
+     padding-left: 5px;
+     line-height: 20px;
+    /* Position the tooltip */
+     position: absolute;
+     z-index: 1;
+}
+ .MMM-HKWeather .tooltip:hover .tooltiptext {
+     visibility: visible;
+}
+ .MMM-HKWeather .CellWithComment {
+     position: relative;
+     z-index: 1;
+}
+ .MMM-HKWeather .CellComment {
+     width: 80px;
+     line-height: 14px;
+     display: none;
+     float: center;
+     box-shadow: 0px 0px 0px 2px #888888;
+     height: auto;
+     z-index: 100;
+     background-color: #080808;
+     border-style: solid;
+     border-width: 1px;
+     border-color: white;
+     padding: 10px 5px 10px 5px;
+     font-size: 12px;
+     color: white;
+     position: absolute;
+     right: 0;
+     bottom: 0;
+     bottom: 15px;
+     text-align: center;
+     border-radius: 5px;
+}
+ .MMM-HKWeather .CellComment2 {
+     width: 100% line-height: 14px;
+     display: none;
+     float: center;
+     box-shadow: 0px 0px 0px 2px #888888;
+     height: auto;
+     z-index: 100;
+     background-color: #080808;
+     border-style: solid;
+     border-width: 1px;
+     border-color: white;
+     padding: 10px 5px 10px 5px;
+     font-size: 12px;
+     color: white;
+     position: absolute;
+     right: 0;
+     bottom: 0;
+     bottom: 15px;
+     text-align: center;
+     border-radius: 5px;
+}
+ .MMM-HKWeather .CellWithComment:hover span.CellComment {
+     display: block;
+}
+ .MMM-HKWeather .divTableParent {
+     max-height: 20px;
+     overflow: auto;
+     overflow-x: hidden;
+}
+ .MMM-HKWeather .divTable {
+     display: table;
+     line-height: 8px;
+     width: 100%;
+     font-size: 14px;
+     text-align: center;
+     color: white;
+}
+ .MMM-HKWeather .divTableBody {
+     display: table-row-group;
+}
+ .MMM-HKWeather .divTableRow {
+     display: table-row;
+     position: relative;
+     line-height: 20px;
+}
+ .MMM-HKWeather .divTableHead {
+     line-height: 5px;
+     animation: colorchange 121s ease-out infinite;
+     -webkit-animation: colorchange 121s ease-out infinite;
+     border-right: 1px solid rgb(0, 0, 0);
+     line-height: 2px;
+     font-weight: 700;
+}
+ @keyframes colorchange {
+     0% {
+         color: #cc4400;
+    }
+     25% {
+         color: #cc8800;
+    }
+     50% {
+         color: #009900;
+    }
+     75% {
+         color: #80bfff;
+    }
+     100% {
+         color: #cc4400;
+    }
+}
+ @-webkit-keyframes colorchange 
+/* Safari and Chrome - necessary duplicate */
+ {
+     0% {
+         color: #cc4400;
+    }
+     25% {
+         color: #cc8800;
+    }
+     50% {
+         color: #009900;
+    }
+     75% {
+         color: #80bfff;
+    }
+     100% {
+         color: #cc4400;
+    }
+}
+ .MMM-HKWeather .divTableCell, .divTableHead {
+     border: 1px solid rgba(44, 46, 46, 0.15);
+     display: table-cell;
+     padding: 8px;
+     height: 3px;
+     width: 33%;
+}
+ .MMM-HKWeather .divTableCell2 {
+     display: table-cell;
+     padding-bottom: 30px;
+     float: left;
+     font-size: 72px;
+}
+ .MMM-HKWeather .divTableCell, .divTableHead {
+     border-bottom: 0px;
+     border-right: 0px;
+}
+ .MMM-HKWeather .red {
+     color: #FA8072;
+     position: relative;
+     top: -3px;
+}
+ .MMM-HKWeather .blue {
+     color: #1E90FF;
+     position: relative;
+     top: 3px;
+}
