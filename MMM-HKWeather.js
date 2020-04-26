@@ -57,6 +57,8 @@ Module.register("MMM-HKWeather", {
 		this.ltmv = null;
 		this.forecast = [];
 		this.aqhi = null;
+		this.weatherWarning = false;
+		this.warning = [];
 		
 		this.updateWeather();
 
@@ -84,15 +86,84 @@ Module.register("MMM-HKWeather", {
 		// 最新十分鐘平均能見度 LTMV
 		var url5 = "http://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LTMV&rformat=json&lang=" + this.config.lang;
 		
-		// 詳細天氣警告資訊 ( 未有資料，後補 )
-		var url6 = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warningInfo&lang="  + this.config.lang;
+		// 空氣質素健康指數 AQHI
+		var url6 = "https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi.json"
 		
-		// 天氣警告一覽
+		// 天氣警告一覽 ( 資料不足，慢慢補齊 )
 		// https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=tc
+		var url7 = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=" + this.config.lang;
 		
 		var nextLoad = this.config.updateInterval;
 		var self = this;
 		
+		fetch(url7)
+			.then((resp) => resp.json()) 
+			.then(function(data) {
+				
+				// console.log ( Object.keys(data).length );
+				self.warning = [];
+				
+				if ( Object.keys(data).length > 0 ) {
+					self.weatherWarning = true;
+					
+					if ( data.has("WTCSGNL") ) {
+						self.warning.push( data.WTCSGNL.code );
+					}
+					
+					if ( data.has("WRAIN") ) {
+						self.warning.push( data.WRAIN.code );
+					}
+					
+					if ( data.has("WCOLD") ) {
+						self.warning.push( data.WCOLD.code );
+					}
+
+					if ( data.has("WHOT") ) {
+						self.warning.push( data.WHOT.code );
+					}
+
+					if ( data.has("WFIRE") ) {
+						self.warning.push( data.WFIRE.code );
+					}
+					
+					if ( data.has("WTS") ) {
+						self.warning.push( data.WTS.code );
+					}
+
+					if ( data.has("WMSGNL") ) {
+						self.warning.push( data.WMSGNL.code );
+					}
+
+					if ( data.has("WL") ) {
+						self.warning.push( data.WL.code );
+					}
+
+					if ( data.has("WFROST") ) {
+						self.warning.push( data.WFROST.code );
+					}
+
+					if ( data.has("WFNTSA") ) {
+						self.warning.push( data.WFNTSA.code );
+					}
+
+					if ( data.has("WTMW") ) {
+						self.warning.push( data.WTMW.code );
+					}
+					
+				} else {
+					self.weatherWarning = false;
+				}
+				
+				// self.weatherWarning = true;
+				// self.warning = ['TC10','WRAINB','WL','WTS','WMSGNL'];
+				
+				self.updateDom();
+			})
+			.catch(function(error) {
+				// If there is any error you will catch them here
+			});
+			
+			
 		fetch(url1)
 			.then((resp) => resp.json()) 
 			.then(function(data) {
@@ -100,9 +171,13 @@ Module.register("MMM-HKWeather", {
 				
 				self.temperature = data.temperature.data[0].value + "°C";
 				self.humidity = data.humidity.data[0].value + "%";
-				self.uv = data.uvindex.data[0].value + "(" + data.uvindex.data[0].desc + ")";
 				self.icon = self.config.imageArray[data.icon[0]];
-				// self.icon = "https://www.hko.gov.hk/images/wxicon/pic" + data.icon[0]; + ".png";
+				
+				if ( data.uvindex == "" ) {
+					self.uv = "---";
+				} else {
+					self.uv = data.uvindex.data[0].value + "(" + data.uvindex.data[0].desc + ")";
+				}
 				
 				self.updateDom();
 			})
@@ -164,29 +239,36 @@ Module.register("MMM-HKWeather", {
 				// If there is any error you will catch them here
 			});
 		
-		// ask node_helper to update AQHI
-		this.sendSocketNotification('CONFIG', this.config);
+		fetch(url6)
+			.then((resp) => resp.json()) 
+			.then(function(data) {
+				// Here you get the data to modify as you please
+				
+				var min = data[0].aqhi_min;
+				var max = data[0].aqhi_max;
+				
+				if ( min == max ) {
+					self.aqhi = min;
+				} else {
+					if ( self.config.lang == "en" ) {
+						self.aqhi = min + " to " + max;
+					} else {
+						self.aqhi = min + " 至 " + max;
+					}
+				}
+				
+				self.updateDom();
+				
+			})
+			.catch(function(error) {
+				// If there is any error you will catch them here
+			});
 
 		setTimeout(function() {
 			self.updateWeather();
 		}, nextLoad);
 
 	},
-	
-    socketNotificationReceived: function(notification, payload) {
-		
-		if (notification === "UPDATE_AQHI") {
-			
-			var parser = new DOMParser();
-			var xmlDoc = parser.parseFromString(payload,"text/xml");
-			var aqhitext = xmlDoc.getElementsByTagName("description")[1].textContent;
-			var aqhi = aqhitext.slice(aqhitext.indexOf(":") + 1,aqhitext.indexOf("("));
-			
-            this.aqhi = aqhi;
-
-        }
-        this.updateDom();
-    },
 	
 	getStyles: function() {
 		return [
@@ -202,7 +284,6 @@ Module.register("MMM-HKWeather", {
 			'zh-cn': "translations/zh_cn.json"
 		}
 	},
-
 
 	// Override dom generator.
 	getDom: function() {
@@ -226,23 +307,19 @@ Module.register("MMM-HKWeather", {
 		// 現時氣溫 ( 京士柏 )
         var cur = document.createElement("div");
         cur.classList.add("tempf", "tooltip");
-		var temper = this.temperature;
         cur.innerHTML = `<div class="divTable">
           <div class="divTableBody">
         <div class="divTableRow">
             <div class="divTableHead"> </div> 
         </div>
 		<div class="divTableRow"> 
-                <div class="divTableCell2">${temper}</div>
+                <div class="divTableCell2">${this.temperature}</div>
             </div></div></div> `;
         wrapper.appendChild(cur);
 
 		// 濕度 ( 香港天文台 ) + UV ( 京士柏 ) + 十分鐘平均能見度 ( 中環 )
         var top = document.createElement('div');
         top.classList.add('topshow');
-		var humid = this.humidity;
-        var Baro = this.uv;
-        var Miles = this.ltmv;
         top.innerHTML =
             `<div class="divTable">
           <div class="divTableBody">
@@ -253,17 +330,13 @@ Module.register("MMM-HKWeather", {
         </div>
 		
 		<div class="divTableRow">
-                <div class="divTableCell">${humid}</div>
-                <div class="divTableCell">${Baro}</div>
-                <div class="divTableCell">${Miles}</div>
+                <div class="divTableCell">${this.humidity}</div>
+                <div class="divTableCell">${this.uv}</div>
+                <div class="divTableCell">${this.ltmv}</div>
             </div></div></div>`;
         wrapper.appendChild(top);
 
 		// 日出 + 日落 + AQHI ( 環保署，當前空氣質素健康指數，一般監測站 )
-        var sunrise = this.sunrise;
-        var sunset = this.sunset;
-		var air = this.aqhi;
-
         var nextDiv = document.createElement('div');
         nextDiv.innerHTML =
             `<div class="divTable">
@@ -276,9 +349,9 @@ Module.register("MMM-HKWeather", {
       </div>
 	 
       <div class="divTableRow">
-         <div class="divTableCell">${sunrise}</div>
-         <div class="divTableCell">${sunset}</div>
-         <div class="divTableCell">${air}</div>
+         <div class="divTableCell">${this.sunrise}</div>
+         <div class="divTableCell">${this.sunset}</div>
+         <div class="divTableCell">${this.aqhi}</div>
       </div>
    </div>
 </div>`;
@@ -294,7 +367,7 @@ Module.register("MMM-HKWeather", {
             ForecastTable.classList.add("table")
             ForecastTable.setAttribute('style', 'line-height: 20%;');
 
-			// 標題
+			// 標題「香港天氣預測」
             var FCRow = document.createElement("tr");
             var jumpy = document.createElement("th");
             jumpy.setAttribute("colspan", 4);
@@ -312,8 +385,8 @@ Module.register("MMM-HKWeather", {
 				wdshort.setAttribute("style", "padding:11px");
                 wdshort.innerHTML = shortWeek(noaa.week);
                 nextRow.appendChild(wdshort);
-                ForecastTable.appendChild(nextRow);
             }
+			ForecastTable.appendChild(nextRow);
 			
 			// 縮短星期幾文字
 			function shortWeek(week) {
@@ -338,8 +411,8 @@ Module.register("MMM-HKWeather", {
                 fore.classList.add("CellWithComment");
 				fore.innerHTML = "<img src='modules/MMM-HKWeather/images/" + this.config.imageArray[noaa.ForecastIcon] + ".png' height='22' width='28'>";
                 foreRow.appendChild(fore);
-                ForecastTable.appendChild(foreRow);
             }
+			ForecastTable.appendChild(foreRow);
 			
 			// 頭四天，最高 / 最低 溫度
             var tempRow = document.createElement("tr");
@@ -350,46 +423,66 @@ Module.register("MMM-HKWeather", {
                 temper.classList.add("xsmall", "bright");
                 temper.innerHTML = "<span class='red'>" + Math.round(noaa.forecastMaxtemp.value) + "</span>/<span class='blue'>" + Math.round(noaa.forecastMintemp.value) + "</span>";
                 tempRow.appendChild(temper);
-                ForecastTable.appendChild(tempRow);
             }
-
-			// 後四天，星期幾
-            var nextRow = document.createElement("tr");
-            for (i = 4; i < 8; i++) {
-                var noaa = forecast[i];
-                var wdshort = document.createElement("td");
-				wdshort.classList.add("dates", "bright");
-				wdshort.setAttribute("style", "padding:11px");
-                wdshort.innerHTML = shortWeek(noaa.week);
-                nextRow.appendChild(wdshort);
-                ForecastTable.appendChild(nextRow);
-            }
+			ForecastTable.appendChild(tempRow);
 			
-			// 後四天，天氣圖示
-            var foreRow = document.createElement("tr");
-            for (i = 4; i < 8; i++) {
-                var noaa = forecast[i];
-                var fore = document.createElement("td");
-                fore.setAttribute("colspan", "1");
-                //fore.setAttribute('style','float: center');
-                fore.classList.add("CellWithComment");
-				fore.innerHTML = "<img src='modules/MMM-HKWeather/images/" + this.config.imageArray[noaa.ForecastIcon] + ".png' height='22' width='28'>";
-                foreRow.appendChild(fore);
-                ForecastTable.appendChild(foreRow);
-            }
-			
-			// 後四天，最高 / 最低 溫度
-            var tempRow = document.createElement("tr");
-            for (i = 4; i < 8; i++) {
-                var noaa = forecast[i];
-                var temper = document.createElement("td");
-                temper.setAttribute("colspan", "1");
-                temper.classList.add("xsmall", "bright");
-                temper.innerHTML = "<span class='red'>" + Math.round(noaa.forecastMaxtemp.value) + "</span>/<span class='blue'>" + Math.round(noaa.forecastMintemp.value) + "</span>";
-                tempRow.appendChild(temper);
-                ForecastTable.appendChild(tempRow);
-            }
+			if ( this.weatherWarning ) {
+				// display warning icon
+				var warnRow = document.createElement("tr");
+				var warn = document.createElement("td");
+				warn.setAttribute("colspan", "4");
+				for (i = 0; i < 5; i++) {
+					var Img = document.createElement("img");
+					Img.src = "modules/MMM-HKWeather/images/" + this.warning[i] + ".gif";
+					Img.width = "35";
+					Img.height = "35";
+					Img.setAttribute("style", "margin-right:1px;margin-top:10px;");
+					warn.appendChild( Img );
+				}
+				warnRow.appendChild(warn);
+				ForecastTable.appendChild(warnRow);
+				
+			} else {
 
+				// 後四天，星期幾
+				var nextRow = document.createElement("tr");
+				for (i = 4; i < 8; i++) {
+					var noaa = forecast[i];
+					var wdshort = document.createElement("td");
+					wdshort.classList.add("dates", "bright");
+					wdshort.setAttribute("style", "padding:11px");
+					wdshort.innerHTML = shortWeek(noaa.week);
+					nextRow.appendChild(wdshort);
+				}
+				ForecastTable.appendChild(nextRow);
+				
+				// 後四天，天氣圖示
+				var foreRow = document.createElement("tr");
+				for (i = 4; i < 8; i++) {
+					var noaa = forecast[i];
+					var fore = document.createElement("td");
+					fore.setAttribute("colspan", "1");
+					//fore.setAttribute('style','float: center');
+					fore.classList.add("CellWithComment");
+					fore.innerHTML = "<img src='modules/MMM-HKWeather/images/" + this.config.imageArray[noaa.ForecastIcon] + ".png' height='22' width='28'>";
+					foreRow.appendChild(fore);
+				}
+				ForecastTable.appendChild(foreRow);
+				
+				// 後四天，最高 / 最低 溫度
+				var tempRow = document.createElement("tr");
+				for (i = 4; i < 8; i++) {
+					var noaa = forecast[i];
+					var temper = document.createElement("td");
+					temper.setAttribute("colspan", "1");
+					temper.classList.add("xsmall", "bright");
+					temper.innerHTML = "<span class='red'>" + Math.round(noaa.forecastMaxtemp.value) + "</span>/<span class='blue'>" + Math.round(noaa.forecastMintemp.value) + "</span>";
+					tempRow.appendChild(temper);
+				}
+				ForecastTable.appendChild(tempRow);
+				
+			}
+			
             wrapper.appendChild(ForecastTable);
         }
 

@@ -137,7 +137,6 @@
      display: -webkit-box;
      -webkit-box-orient: vertical;
      -webkit-line-clamp: 2;
-     
 	 text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
 	 position: relative;
 }
@@ -280,7 +279,6 @@
      line-height: 5px;
      animation: colorchange 121s ease-out infinite;
      -webkit-animation: colorchange 121s ease-out infinite;
-     border-right: 1px solid rgb(0, 0, 0);
      line-height: 2px;
      font-weight: 700;
 }
