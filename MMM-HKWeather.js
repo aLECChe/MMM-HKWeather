@@ -428,11 +428,12 @@ Module.register("MMM-HKWeather", {
 			ForecastTable.appendChild(tempRow);
 			
 			if ( this.weatherWarning ) {
-				// display warning icon
+				// 如果有天氣警告，就顯示警告圖示
+				var warnLength = this.warning.length > 5 ? 5 : this.warning.length;
 				var warnRow = document.createElement("tr");
 				var warn = document.createElement("td");
 				warn.setAttribute("colspan", "4");
-				for (i = 0; i < this.warning.length; i++) {
+				for (i = 0; i < warnLength; i++) {
 					var Img = document.createElement("img");
 					Img.src = "modules/MMM-HKWeather/images/" + this.warning[i] + ".gif";
 					Img.width = "35";
