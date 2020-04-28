@@ -44,7 +44,7 @@ git clone https://github.com/aLECChe/MMM-HKWeather
 
 To update the module to the latest version:
 
-In your terminal, go to your MagicMirror's Module folder:
+In your terminal, go to MMM-HKWeather's folder:
 ```javascript
 cd ~/MagicMirror/modules/MMM-HKWeather
 ```
