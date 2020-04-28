@@ -106,47 +106,47 @@ Module.register("MMM-HKWeather", {
 				if ( Object.keys(data).length > 0 ) {
 					self.weatherWarning = true;
 					
-					if ( data.has("WTCSGNL") ) {
+					if ( data.hasOwnProperty("WTCSGNL") ) {
 						self.warning.push( data.WTCSGNL.code );
 					}
 					
-					if ( data.has("WRAIN") ) {
+					if ( data.hasOwnProperty("WRAIN") ) {
 						self.warning.push( data.WRAIN.code );
 					}
 					
-					if ( data.has("WCOLD") ) {
+					if ( data.hasOwnProperty("WCOLD") ) {
 						self.warning.push( data.WCOLD.code );
 					}
 
-					if ( data.has("WHOT") ) {
+					if ( data.hasOwnProperty("WHOT") ) {
 						self.warning.push( data.WHOT.code );
 					}
 
-					if ( data.has("WFIRE") ) {
+					if ( data.hasOwnProperty("WFIRE") ) {
 						self.warning.push( data.WFIRE.code );
 					}
 					
-					if ( data.has("WTS") ) {
+					if ( data.hasOwnProperty("WTS") ) {
 						self.warning.push( data.WTS.code );
 					}
 
-					if ( data.has("WMSGNL") ) {
+					if ( data.hasOwnProperty("WMSGNL") ) {
 						self.warning.push( data.WMSGNL.code );
 					}
 
-					if ( data.has("WL") ) {
+					if ( data.hasOwnProperty("WL") ) {
 						self.warning.push( data.WL.code );
 					}
 
-					if ( data.has("WFROST") ) {
+					if ( data.hasOwnProperty("WFROST") ) {
 						self.warning.push( data.WFROST.code );
 					}
 
-					if ( data.has("WFNTSA") ) {
+					if ( data.hasOwnProperty("WFNTSA") ) {
 						self.warning.push( data.WFNTSA.code );
 					}
 
-					if ( data.has("WTMW") ) {
+					if ( data.hasOwnProperty("WTMW") ) {
 						self.warning.push( data.WTMW.code );
 					}
 					
@@ -154,6 +154,7 @@ Module.register("MMM-HKWeather", {
 					self.weatherWarning = false;
 				}
 				
+				// test weather warning
 				// self.weatherWarning = true;
 				// self.warning = ['TC10','WRAINB','WL','WTS','WMSGNL'];
 				
@@ -431,7 +432,7 @@ Module.register("MMM-HKWeather", {
 				var warnRow = document.createElement("tr");
 				var warn = document.createElement("td");
 				warn.setAttribute("colspan", "4");
-				for (i = 0; i < 5; i++) {
+				for (i = 0; i < this.warning.length; i++) {
 					var Img = document.createElement("img");
 					Img.src = "modules/MMM-HKWeather/images/" + this.warning[i] + ".gif";
 					Img.width = "35";
