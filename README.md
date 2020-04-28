@@ -26,8 +26,8 @@ git clone https://github.com/aLECChe/MMM-HKWeather
 ```
 
 ## Config.js entry and options
-- The lang option here is only used by the HKO Open Data API. 
-- To change the language of the module, please change the system language.
+- The lang option here is only used by the API.
+- To change the interface language of the module, change the system language of MagicMirror.
 
 ```javascript
   		{
@@ -44,7 +44,6 @@ git clone https://github.com/aLECChe/MMM-HKWeather
 
 To update the module to the latest version:
 
-Use your terminal to go to your MMM-CountUP module folder 
 In your terminal, go to your MagicMirror's Module folder:
 ```javascript
 cd ~/MagicMirror/modules/MMM-HKWeather
