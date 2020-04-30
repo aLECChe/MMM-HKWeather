@@ -321,7 +321,10 @@
  .MMM-HKWeather .divTableCell, .divTableHead {
      border: 1px solid rgba(44, 46, 46, 0.15);
      display: table-cell;
-     padding: 6px;
+     padding-top: 7px;
+	 padding-left: 6px;
+	 padding-right: 6px;
+	 padding-bottom: 7px;
      height: 3px;
      width: 33%;
 }
