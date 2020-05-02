@@ -410,7 +410,7 @@ Module.register("MMM-HKWeather", {
                 fore.setAttribute("colspan", "1");
                 //fore.setAttribute('style','float: center');
                 fore.classList.add("CellWithComment");
-				fore.innerHTML = "<img src='modules/MMM-HKWeather/images/" + this.config.imageArray[noaa.ForecastIcon] + ".png' height='22' width='28' style='object-fix:contain;'>";
+				fore.innerHTML = "<img src='modules/MMM-HKWeather/images/" + this.config.imageArray[noaa.ForecastIcon] + ".png' height='22' width='28' style='object-fit:contain;'>";
                 foreRow.appendChild(fore);
             }
 			ForecastTable.appendChild(foreRow);
@@ -466,7 +466,7 @@ Module.register("MMM-HKWeather", {
 					fore.setAttribute("colspan", "1");
 					//fore.setAttribute('style','float: center');
 					fore.classList.add("CellWithComment");
-					fore.innerHTML = "<img src='modules/MMM-HKWeather/images/" + this.config.imageArray[noaa.ForecastIcon] + ".png' height='22' width='28' style='object-fix:contain;'>";
+					fore.innerHTML = "<img src='modules/MMM-HKWeather/images/" + this.config.imageArray[noaa.ForecastIcon] + ".png' height='22' width='28' style='object-fit:contain;'>";
 					foreRow.appendChild(fore);
 				}
 				ForecastTable.appendChild(foreRow);
